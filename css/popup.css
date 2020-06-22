@@ -76,6 +76,12 @@ input[type="checkbox"] {
     width: 285px;
     height: 532px;
     overflow: hidden scroll;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.left::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
 }
 
 .left .list {
@@ -185,11 +191,17 @@ input[type="checkbox"] {
     height: 246px;
     margin: 0 auto;
     overflow: hidden scroll;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.right::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
 }
 
 .right .list_box .list {
     width: 285px;
-    min-height: 100px;
+    min-height: 2000px;
     margin-left: 10px;
 }
 
