@@ -18,12 +18,32 @@ ul {
 }
 .fl {float: left;}
 
+input[type="checkbox"] + label {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border: 1px solid #bcbcbc;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked + label {
+    background: url("../chk.png") no-repeat left top;
+    background-color: #bcbcbc;
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+
 /* 리스트 */
 .click {cursor: pointer;}
 .w20 {width: 20px;}
 .w28 {width: 28px;}
 .w50 {width: 50px;}
 .w140 {width: 140px; margin-left: 10px;}
+.w220 {width: 220px; margin-left: 10px;}
 .rd {width: 40px; border-radius: 5px; overflow: hidden;}
 .ct {text-align: center;}
 .lf {text-align: left;}
@@ -41,7 +61,6 @@ ul {
 }
 
 .top {
-    background: red;
     width: 580px;
     height: 30px;
     margin-bottom: 10px;
@@ -61,7 +80,7 @@ ul {
 
 .left .list {
     width: 285px;
-    height: 1000px;
+    min-height: 100px;
 }
 
 .left .list .sub {
@@ -75,9 +94,10 @@ ul {
     margin-bottom: 20px;
 }
 
-.left .list .sub .all {
+.left .list .sub .all,
+.right .toolbar > ul {
 	text-decoration:none;
-	text-indent:0px;
+	text-indent:0;
 	line-height:25px;
 	text-align:left;
 	vertical-align:middle;
@@ -92,7 +112,7 @@ ul {
 }
 
 .play {
-    margin-left: 5px;
+    margin-left: 2px;
 }
 .fill {
     margin-left: 10px;
@@ -120,11 +140,20 @@ ul {
 }
 
 .right {
-    background: pink;
+    background: #fff;
     border-radius: 10px;
     width: 285px;
     float: right;
     overflow: hidden;
+}
+
+.right .sub_02 {
+    margin: 0 0 17px;
+}
+
+.right .sub_02 > h2 {
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 .right .video {
@@ -136,17 +165,31 @@ ul {
     
 }
 
+.right .toolbar {
+    border-bottom: 1px solid #d9d9d9;
+    width: 265px;
+    margin-left: 10px;
+}
+
+
+.right .toolbar > ul > li {
+    margin: 0 0 10px 15px;
+}
+
+.right .toolbar > ul > li:first-child {
+    margin-left: 2px;
+}
+
 .right .list_box {
-    background: orange;
     width: 285px;
-    height: 345px;
+    height: 246px;
     margin: 0 auto;
     overflow: hidden scroll;
 }
 
 .right .list_box .list {
-    background: red;
     width: 285px;
-    height: 2000px;
+    min-height: 100px;
+    margin-left: 10px;
 }
 
