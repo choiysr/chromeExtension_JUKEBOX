@@ -1,0 +1,116 @@
+BODY {
+    width: 600px;
+    height: 575px;
+}
+
+/* 공통 */
+li {
+    float: left;
+    list-style:none;
+}
+ul {
+    width: 580px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+.fl {float: left;}
+.line {
+    border-bottom: solid 1px gray;
+    width: 560px;
+}
+
+/* 리스트 */
+.w50 {width: 50px;}
+.ct {text-align: center;}
+
+
+
+
+
+
+
+#total_box {
+    width: 580px;
+    margin: 0 auto;
+}
+
+.top {
+    background: red;
+    width: 580px;
+    height: 30px;
+    margin-bottom: 10px;
+}
+
+.top > ul > li:last-child {
+    margin-left: 270px;
+}
+
+.left {
+    /* background:blue; */
+    width: 285px;
+    height: 532px;
+    overflow: hidden scroll;
+}
+
+.left .list {
+    width: 285px;
+    height: 1000px;
+}
+
+.left .list .sub > h2 {
+    text-align: center;
+}
+
+.left .list .sub .all {
+	text-decoration:none;
+	text-indent:0px;
+	line-height:25px;
+	text-align:left;
+	vertical-align:middle;
+	display:inline-block;
+    font-size:12px;
+    height:25px;
+    border:0;
+    background: none;
+    cursor: pointer;
+}
+
+.play {
+    margin-left: 10px;
+}
+.fill {
+    margin-left: 10px;
+}
+
+.right {
+    background: pink;
+    width: 285px;
+    float: right;
+
+}
+
+.right .video {
+    background: gray;
+    width: 285px;
+    height: 187px;
+    /* video 250*187 */
+    margin: 0 auto;
+    
+}
+
+.right .list_box {
+    background: orange;
+    width: 285px;
+    height: 345px;
+    margin: 0 auto;
+    overflow: hidden scroll;
+}
+
+.right .list_box .list {
+    background: red;
+    width: 285px;
+    height: 2000px;
+}
+
