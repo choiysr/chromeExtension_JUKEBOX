@@ -1,6 +1,7 @@
 BODY {
     width: 600px;
     height: 575px;
+    background: #ebebeb;
 }
 
 /* 공통 */
@@ -16,14 +17,17 @@ ul {
     padding: 0;
 }
 .fl {float: left;}
-.line {
-    border-bottom: solid 1px gray;
-    width: 560px;
-}
 
 /* 리스트 */
+.click {cursor: pointer;}
+.w20 {width: 20px;}
+.w28 {width: 28px;}
 .w50 {width: 50px;}
+.w140 {width: 140px; margin-left: 10px;}
+.rd {width: 40px; border-radius: 5px; overflow: hidden;}
 .ct {text-align: center;}
+.lf {text-align: left;}
+.artist {color: #999;}
 
 
 
@@ -48,7 +52,8 @@ ul {
 }
 
 .left {
-    /* background:blue; */
+    background:white;
+    border-radius: 10px;
     width: 285px;
     height: 532px;
     overflow: hidden scroll;
@@ -59,8 +64,15 @@ ul {
     height: 1000px;
 }
 
+.left .list .sub {
+    border-bottom: 1px solid #d9d9d9;
+    width: 265px;
+    margin: 0 0 21px 10px;
+}
+
 .left .list .sub > h2 {
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .left .list .sub .all {
@@ -75,20 +87,44 @@ ul {
     border:0;
     background: none;
     cursor: pointer;
+    margin-bottom: 7px;
+    color: #333;
 }
 
 .play {
-    margin-left: 10px;
+    margin-left: 5px;
 }
 .fill {
     margin-left: 10px;
 }
 
+.left .list .bottom {
+    width: 265px;
+    margin-left: 10px;
+    text-align: center;
+}
+
+.left .list .bottom > ul {
+    margin-bottom: 25px;
+}
+
+.left .list .bottom > ul > li:nth-child(2) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.left .list .bottom > ul > li:nth-child(3) {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
 .right {
     background: pink;
+    border-radius: 10px;
     width: 285px;
     float: right;
-
+    overflow: hidden;
 }
 
 .right .video {
