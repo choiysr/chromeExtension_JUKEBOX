@@ -2,7 +2,24 @@ BODY {
     width: 600px;
     height: 575px;
     background: #ebebeb;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 }
+body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+    width: 5px;
+    background: none;
+}
+
+body::webkit-scrollbar-thumb {
+    background: #666;
+    border-radius: 100px;
+}
+
+body::-webkit-scrollbar-track {
+    background-color: none;
+}
+
 
 /* 공통 */
 li {
@@ -76,12 +93,6 @@ input[type="checkbox"] {
     width: 285px;
     height: 532px;
     overflow: hidden scroll;
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-}
-
-.left::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
 }
 
 .left .list {
@@ -191,12 +202,6 @@ input[type="checkbox"] {
     height: 246px;
     margin: 0 auto;
     overflow: hidden scroll;
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-}
-
-.right::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
 }
 
 .right .list_box .list {
