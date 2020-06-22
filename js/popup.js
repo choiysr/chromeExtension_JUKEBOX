@@ -1,4 +1,9 @@
-$("body").niceScroll({
-    cursorcolor:"#666",
-    cursorwidth:"5px"
-});
+$(function () {
+    $(".left").niceScroll();
+}
+)
+
+$(function () {
+        $(".right .list_box").niceScroll();
+    }
+)
