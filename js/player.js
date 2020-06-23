@@ -1,5 +1,4 @@
-
-
+var player;
 
 $(document).ready(() => {
     // 2. This code loads the IFrame Player API code asynchronously.
@@ -8,17 +7,10 @@ $(document).ready(() => {
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     onPlay();
-
 })
 
 
-
-var player;
-
 function onPlay(targetIdx) {
-
-
-
     console.log("확인")
     if (player == null) {
         console.log("플레이어 객체 생성");
