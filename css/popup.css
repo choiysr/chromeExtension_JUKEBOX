@@ -9,7 +9,7 @@
 ::-webkit-scrollbar-button:end:increment {
     display: block;
     height: 10px;
-    background: url('./images/bg.png') none;
+    background: none;
 }
 
 ::-webkit-scrollbar-track {
@@ -260,7 +260,7 @@ input[type="checkbox"] {
 
 .right .list_box .list {
     width: 285px;
-    min-height: 2000px;
+    min-height: 100px;
     margin-left: 10px;
 }
 
