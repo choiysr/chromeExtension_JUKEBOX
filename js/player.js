@@ -16,8 +16,8 @@ function onPlay(targetIdx) {
         console.log("플레이어 객체 생성");
         setTimeout(() => {
             player = new YT.Player('player', {
-                height: '217',
-                width: '290',
+                height: '187',
+                width: '285',
                 videoId: '3yST4DBZ8aE',
                 host: 'https://www.youtube.com',
                 playerVars: {
