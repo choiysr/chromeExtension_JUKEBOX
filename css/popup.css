@@ -10,7 +10,6 @@ body::-webkit-scrollbar {
 }
 
 
-
 /* 공통 */
 li {
     float: left;
@@ -180,7 +179,7 @@ input[type="checkbox"] {
 
 
 .right .toolbar > ul > li {
-    margin: 0 0 10px 15px;
+    margin: 0 0 10px 10px;
 }
 
 .right .toolbar > ul > li:first-child {
