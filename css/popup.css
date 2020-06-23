@@ -260,7 +260,7 @@ input[type="checkbox"] {
 
 .right .list_box .list {
     width: 285px;
-    min-height: 2000px;
+    min-height: 100px;
     margin-left: 10px;
 }
 
