@@ -264,3 +264,7 @@ input[type="checkbox"] {
     margin-left: 10px;
 }
 
+.clicked {
+    font-weight: bold;
+}
+
