@@ -96,13 +96,13 @@ input[type="checkbox"] {
     width: 50px;
 }
 
-.w140 {
-    width: 140px;
+.w135 {
+    width: 135px;
     margin-left: 10px;
 }
 
-.w220 {
-    width: 220px;
+.w200 {
+    width: 200px;
     margin-left: 10px;
 }
 
@@ -205,7 +205,12 @@ input[type="checkbox"] {
     align-items: center;
 }
 
-.left .list .bottom > ul > li:nth-child(3) {
+.left .list .bottom > ul > li:nth-child(4) {
+    margin-left: 5px;
+}
+
+.left .list .bottom > ul > li:nth-child(3),
+.right .list_box .list > ul > li:nth-child(2) {
     overflow: hidden;
     white-space: nowrap;
 }
@@ -216,6 +221,10 @@ input[type="checkbox"] {
     width: 285px;
     float: right;
     overflow: hidden;
+}
+
+.right .list_box .list > ul > li:nth-child(3) {
+    margin-left: 15px;
 }
 
 .right .sub_02 {
@@ -268,3 +277,30 @@ input[type="checkbox"] {
     font-weight: bold;
 }
 
+
+/*잘린 글자 움직이게*/
+
+.left .list .bottom > ul > li:nth-child(3),
+.right .list_box .list > ul > li:nth-child(2){
+    overflow: hidden;
+    position: relative;
+    background: red;
+    text-overflow: ellipsis;
+    height: auto;
+    white-space: nowrap;
+}
+
+.left .list .bottom > ul > li:nth-child(3) > span,
+.right .list_box .list > ul > li:nth-child(2) > span {
+    transition: transform .5s;
+    transform: translate(0, 0);
+}
+
+.left .list .bottom > ul > li:nth-child(3) > span:hover,
+.right .list_box .list > ul > li:nth-child(2) > span:hover {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: transform 2s;
+    transform: translate(calc(-30%), 0);
+}
