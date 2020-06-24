@@ -10,8 +10,8 @@ function makeMusicChartListTag(song) {
         listStr += '<ul><li class="w20">' + song.ranking + '</li>'
             + '<li class="w50 rd"><img src="' + song.thumbnail + '" width="40px" alt="album art"></li>'
             + '<li class="w135 lf"><span class="title-span">' + song.title + '</span><div class="artist"><span class="singer-span">' + song.singer + '</span></div></li>'
-            + '<li class="w28 click play-now" data-sid="' + song.sid + '" data-youtubeId="'+song.youtubeId+'"><img src="play_list.png" alt="재생" width="12px"></li>'
-            + '<li class="w28 click add-only" data-sid="' + song.sid + '" data-youtubeId="'+song.youtubeId+'"><img src="plus_list.png" alt="추가" width="12px"></li></ul>'
+            + '<li class="w28 click play-now" data-sid="' + song.sid + '" data-youtubeId="' + song.youtubeId + '"><img src="play_list.png" alt="재생" width="12px"></li>'
+            + '<li class="w28 click add-only" data-sid="' + song.sid + '" data-youtubeId="' + song.youtubeId + '"><img src="plus_list.png" alt="추가" width="12px"></li></ul>'
     })
     return listStr;
 }
@@ -20,12 +20,12 @@ function makeMusicChartListTag(song) {
 function makeMyListTag(song) {
     let listStr = '';
     let listCount = $('.listCount').length;
-    song.forEach((song,index)=> {
-        listStr += '<ul><li class="w20 listCount"><input type="checkbox" id="chk_'+song.sid+'" value="'+(listCount+1)+'" data-idx="'+(listCount+1)+'" data-sid="'+song.sid+' data-youtubeId="'+song.youtubeId+'" data-pid="'+song.pid+'">'
-            + '<label for="chk_'+song.sid+'"></label></li>'
-            + '<li class="w200 lf"><span>'+song.title+'</span><div class="artist"><span>'+song.singer+'</span></div></li>'
+    song.forEach((song, index) => {
+        listStr += '<ul><li class="w20 listCount"><input type="checkbox" id="chk_' + song.sid + '" value="' + (listCount + 1) + '" data-idx="' + (listCount + 1) + '" data-sid="' + song.sid + '" data-youtubeId="' + song.youtubeId + '" data-pid="' + song.pid + '">'
+            + '<label for="chk_' + song.sid + '"></label></li>'
+            + '<li class="w200 lf"><span>' + song.title + '</span><div class="artist"><span>' + song.singer + '</span></div></li>'
             + '<li class="w28 click"><img src="close.png" alt="삭제" width="9px"></li></ul>';
-            ++listCount;
+        ++listCount;
     })
     return listStr;
 }
@@ -47,6 +47,38 @@ function getMusicChartList(type, page) {
     ajaxService.getAjax(API_Server.commonURL + 'musicChartList/' + type + '/' + page, success);
 }
 
+// Chart 리스트의 곡 추가 버튼을 눌렀을때 Player에 추가해주는 function
+function addMusicIntoPlayList(target, play) {
+    let $target = $(target);
+    let $listDiv = $(".myPlaylist");
+    let currentListCount = $('.listCount').length;
+    let songArr = [];
+    // 로그인정보 삽입시 pid 수정 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    let pid = '';
+    song = {
+        'pid': pid,
+        'sid': $target.data('sid'),
+        // data속성은 소문자로 조회해야한다(?)
+        'youtubeId': $target.data('youtubeid'),
+        'title': $target.parent().find('.title-span').text(),
+        'singer': $target.parent().find('.singer-span').text()
+    };
+    console.log($target)
+    console.log(song)
+    songArr.push(song);
+    $listDiv.append(makeMyListTag(songArr));
+
+    // 리스트에 아무곡도 들어있지 않았던 경우 리스트영역을 띄우고 리스트에 들어온 가장 첫곡을 재생시킨다. 
+    // undefine 고려해서 조건문 수정할것!!!! 
+    if (currentListCount == 0) {
+        // 리스트 영역을 띄운후
+        onPlay(1);
+    }
+    else if (currentListCount != 0 && play == 'play') {
+        onPlay(currentListCount + 1);
+    }
+}
+
 
 $(document).ready(() => {
     // 2. This code loads the IFrame Player API code asynchronously.
@@ -54,49 +86,43 @@ $(document).ready(() => {
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    getMusicChartList('realtime',1);
+    getMusicChartList('realtime', 1);
     onPlay();
 
     // 상단 차트타입 선택시 이벤트 
     $('#chartTypes').on('click', 'li', function (e) {
         // 로고 and 로그인 버튼 클릭 이벤트 설정하기!!!!!!!!!!!!!!!!!!!
+        $('.left').scrollTop(0);
         e.preventDefault;
         let type = this.dataset.id;
         let $chartText = $("#chartText");
         if (type != null) {
             if (type == 'realtime') {
-                $chartText.text('실시간차트')
+                $chartText.text('REALTIME CHART')
             } else if (type == 'daily') {
-                $chartText.text('일간차트')
+                $chartText.text('DAILY CHART')
             } else if (type == 'weekly') {
-                $chartText.text('주간차트')
+                $chartText.text('WEEKLY CHART')
             } else {
-                $chartText.text('월간차트')
+                $chartText.text('MONTHLY CHART')
             }
             getMusicChartList(type, 1);
         }
     })
 
     // 차트에서 각 노래 추가 버튼 이벤트
-    $(".add-only").on('click', function(e){
+    $(".add-only").on('click', function (e) {
         e.preventDefault;
-        let $target = $(this);
-        let $listDiv = $(".list");
-        let currentListCount = $('.listCount').length;
-        let songArr = [];
-        // 로그인정보 삽입시 pid 수정 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        let pid = ''; 
-        song = {
-            'pid': pid,
-            'sid': $target.data('sid'),
-            'youtubeId': $target.data('youtubeId'),
-            'title': $target.parent().find('.title-span').text(),
-            'singer':  $target.parent().find('.singer-span').text()
-        };
-        songArr.push(song);
-        $listDiv.append(makeMyListTag(songArr));
+        addMusicIntoPlayList(this);
     })
-    
+
+    // 차트에서 각 노래 재생 버튼 이벤트
+    $('.play-now').on('click', function (e) {
+        e.preventDefault;
+        addMusicIntoPlayList(this, 'play');
+
+    });
+
 
 
 }) // end of onready 
@@ -104,13 +130,15 @@ $(document).ready(() => {
 
 
 function onPlay(targetIdx) {
+    currentPlayingIdx = targetIdx;
+    let youtubeId = $('[data-idx="' + targetIdx + '"]').data('youtubeid');
     if (player == null) {
         console.log("플레이어 객체 생성");
         setTimeout(() => {
             player = new YT.Player('player', {
                 height: '187',
                 width: '285',
-                videoId: '3yST4DBZ8aE',
+                videoId: youtubeId,
                 host: 'https://www.youtube.com',
                 playerVars: {
                     'controls': 1, //플레이어 컨드롤러 표시여부
