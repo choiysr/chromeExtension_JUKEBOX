@@ -2,16 +2,38 @@ var player;
 var currentPlayingIdx;
 const API_Server = new URL('http://localhost:8080/');
 
+
+// 음악차트 리스트 태그를 만들어서 문자열 형태로 반환하는 function
+function makeMusicChartListTag(song) {
+    let listStr = '';
+    song.forEach((song, index) => {
+        listStr += '<ul><li class="w20">' + song.ranking + '</li>'
+            + '<li class="w50 rd"><img src="' + song.thumbnail + '" width="40px" alt="album art"></li>'
+            + '<li class="w140 lf">' + song.title + '<div class="artist">' + song.singer + '</div></li>'
+            + '<li class="w28 click play-now" data-sid="' + song.sid + '" data-youtubeId="'+song.youtubeId+'"><img src="play_list.png" alt="재생" width="12px"></li>'
+            + '<li class="w28 click add-only" data-sid="' + song.sid + '" data-youtubeId="'+song.youtubeId+'"><img src="plus_list.png" alt="추가" width="12px"></li></ul>'
+    })
+    return listStr;
+}
+
+// 플레이리스트 태그를 만들어서 문자열 형태로 반환하는 function
+function makeMyListTag(song) {
+    let listStr = '';
+    song.forEach((song,index)=> {
+        listStr += '<li class="w20"><input type="checkbox" id="chk_'+song.sid+'" data-sid="'+song.sid+' data-youtubeId="'+song.youtubeId+'">'
+            + '<label for="chk'+song.sid+'"></label></li>'
+            + '<li class="w220 lf">'+song.title+'<div class="artist">'+song.singer+'</div></li>'
+            + '<li class="w28 click"><img src="close.png" alt="삭제" width="9px"></li>';
+    })
+    return listStr;
+}
+
 // TYPE별 음악 차트를 ajax로 가져오고, 화면에 태그를 뿌려주는 function 
 function getMusicChartList(type, page) {
-    console.log("type체크")
-    console.log(type)
     $('html').scrollTop(0);
-
     function success(result) {
         let $musicChartDiv = $('.bottom');
         $musicChartDiv.html(makeMusicChartListTag(result.content));
-
         $('.chartType').each(function (index, item) {
             if (item.dataset.id != type) {
                 $('[data-id="' + item.dataset.id + '"]').removeClass('clicked');
@@ -20,24 +42,9 @@ function getMusicChartList(type, page) {
             }
         })
     }
-
     ajaxService.getAjax(API_Server.commonURL + 'musicChartList/' + type + '/' + page, success);
-
 }
 
-
-// 음악 차트 리스트 태그를 만들어서 문자열 형태로 반환하는 function
-function makeMusicChartListTag(song) {
-    let listStr = '';
-    song.forEach((song, index) => {
-        listStr += '<ul><li class="w20">' + song.ranking + '</li>'
-            + '<li class="w50 rd"><img src="' + song.thumbnail + '" width="40px" alt="album art"></li>'
-            + '<li class="w140 lf">' + song.title + '<div class="artist">' + song.singer + '</div></li>'
-            + '<li class="w28 click" data-sid="' + song.sid + '"><img src="play_list.png" alt="재생" width="12px"></li>'
-            + '<li class="w28 click" data-sid="' + song.sid + '"><img src="plus_list.png" alt="추가" width="12px"></li></ul>'
-    })
-    return listStr;
-}
 
 $(document).ready(() => {
     // 2. This code loads the IFrame Player API code asynchronously.
@@ -48,8 +55,9 @@ $(document).ready(() => {
     getMusicChartList('realtime',1);
     onPlay();
 
+    // 상단 차트타입 선택시 이벤트 
     $('#chartTypes').on('click', 'li', function (e) {
-        // 로고 and 로그인 버튼 클릭 이벤트 설정하기
+        // 로고 and 로그인 버튼 클릭 이벤트 설정하기!!!!!!!!!!!!!!!!!!!
         e.preventDefault;
         let type = this.dataset.id;
         let $chartText = $("#chartText");
@@ -68,13 +76,20 @@ $(document).ready(() => {
         }
     })
 
+    // 차트에서 각 노래 추가 버튼 이벤트
+    $(".add-only").on('click', function(e){
+        e.preventDefault;
+        let targetSid = this.dataset.id;
+        console.log(this);
+    })
+    
+
 
 }) // end of onready 
 
 
 
 function onPlay(targetIdx) {
-    console.log("확인")
     if (player == null) {
         console.log("플레이어 객체 생성");
         setTimeout(() => {
