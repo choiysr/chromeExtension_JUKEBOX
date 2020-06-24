@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,81 +12,78 @@
 </head>
 
 <body>
-    <div id="total_box">
-        <div class="top">
-            <ul id="chartTypes">
-                <li class="w50 ct"><img src="logo.png" width="15px" alt="로고"></li>
-                <li class="w50 ct click chartType" data-id="realtime">REALTIME</li>
-                <li class="w50 ct click chartType" data-id="daily">DAILY</li>
-                <li class="w50 ct click chartType" data-id="weekly">WEEKLY</li>
-                <li class="w50 ct click chartType" data-id="monthly">MONTHLY</li>
-                <li class="w50 ct">SIGN-IN</li>
-            </ul>
-        </div>
-        <div class="left fl">
-            <div class="list">
-                <div class="sub">
-                    <h2 id="chartText">REALTIME CHART</h2>
-                    <div class="all play click"><img src="play.png" width="9px" alt="재생"> PLAY ALL</div>
-                    <div class="all fill click"><img src="plus.png" width="9px" alt="추가"> ADD ALL</div>
-                </div>
-                <div class="bottom">
-                    <ul>
-                        <li class="w20">1</li>
-                        <li class="w50 rd"><img
-                                src="https://cdnimg.melon.co.kr/cm/album/images/101/17/789/10117789_500.jpg/melon/resize/120/quality/80/optimize"
-                                width="40px" alt="album art"></li>
-                        <li class="w135 lf"><span>Downtown Baby</span>
-                            <div class="artist"><span>블루(BLOO)</span></div>
-                        </li>
-                        <li class="w28 click"><img src="play_list.png" alt="재생" width="12px" data-sid="test1"></li>
-                        <li class="w28 click"><img src="plus_list.png" alt="추가" width="12px"></li>
-                    </ul>
-                </div>
+<div id="total_box">
+    <div class="top">
+        <ul id="chartTypes">
+            <li class="w50 ct"><img src="logo.png" width="15px" alt="로고"></li>
+            <li class="w50 ct click chartType" data-id="realtime">실시간</li>
+            <li class="w50 ct click chartType" data-id="daily">일간</li>
+            <li class="w50 ct click chartType" data-id="weekly">주간</li>
+            <li class="w50 ct click chartType" data-id="monthly">월간</li>
+            <li class="w50 ct">로그인</li>
+        </ul>
+    </div>
+    <div class="left fl">
+        <div class="list">
+            <div class="sub">
+                <h2 id="chartText">실시간 차트</h2>
+                <div class="all play click" id="playAll"><img src="play.png" width="9px" alt="재생"> PLAY ALL</div>
+                <div class="all fill click" id="addAll"><img src="plus.png" width="9px" alt="추가"> ADD ALL</div>
+            </div>
+            <div class="bottom">
+                <ul>
+                    <li class="w20">1</li>
+                    <li class="w50 rd"><img
+                            src="https://cdnimg.melon.co.kr/cm/album/images/101/17/789/10117789_500.jpg/melon/resize/120/quality/80/optimize"
+                            width="40px" alt="album art"></li>
+                    <li class="w135 lf"><span>Downtown Baby</span>
+                        <div class="artist"><span>블루(BLOO)</span></div>
+                    </li>
+                    <li class="w28 click"><img src="play_list.png" alt="재생" width="12px" data-sid="test1"></li>
+                    <li class="w28 click"><img src="plus_list.png" alt="추가" width="12px"></li>
+                </ul>
             </div>
         </div>
+    </div>
 
-        <div class="right">
-            <div class="sub_02">
-                <h2>MUSIC PLAYER</h2>
-            </div>
+        <div class="right" style="display: none;">
+            <div class="sub_02"><h2>MUSIC PLAYER</h2>
             <div class="video">
                 <div id="player"></div>
             </div>
-            <div class="toolbar">
                 <ul>
                     <li class="click"><img src="tick.png" width="9px" alt="선택" id="checkAll"> SELECT ALL</li>
                     <li class="click"><img src="delete.png" width="9px" alt="삭제" id="deleteAll"> DELETE</li>
                     <li class="click"><img src="repeat.png" width="9px" alt="전체반복" id="repeatAll"> REPEAT ALL</li>
-                    <li class="click"><img src="repeat_one.png" width="9px" alt="전체반복" id="repeatOneSong"> REPEAT ONE
-                    </li>
+                    <li class="click"><img src="repeat_one.png" width="9px" alt="전체반복" id="repeatOneSong"> REPEAT ONE</li>
                 </ul>
             </div>
             <div class="list_box">
                 <div class="list myPlaylist">
+
                 </div>
             </div>
         </div>
 
 
-        <!--리스트 없음-->
-        <!-- <div class="no_right">
+    <!--리스트 없음-->
+     <div class="no_right">
         <div class="sub_02">
-            <h2>MUSIC PLAYER</h2>
+            <h2>Music Player</h2>
             <ul>
-                <li class="click"><img src="tick.png" width="9px" alt="선택" id="checkAll"> SELECT ALL</li>
-                <li class="click"><img src="delete.png" width="9px" alt="삭제" id="deleteAll"> DELETE</li>
-                <li class="click"><img src="repeat.png" width="9px" alt="전체반복" id="repeatAll"> REPEAT ALL</li>
-                <li class="click"><img src="repeat_one.png" width="9px" alt="전체반복" id="repeatOneSong"> REPEAT ONE</li>
-            </ul>
-        </div>
-        <div class="empty">
-            <div><img src="empty.png" alt="empty 아이콘" width="30px"></div>
-            <span>MAKE YOUR OWN PLAYER!</span>
-        </div>
-    </div>  -->
+                <li class="click"><img src="tick.png" width="9px" alt="선택" id="checkAll"> 전체선택</li>
+                <li class="click"><img src="delete.png" width="9px" alt="삭제" id="deleteAll"> 선택삭제</li>
+               <li class="click"><img src="repeat.png" width="9px" alt="전체반복" id="repeatAll"> 전체반복</li>
+               <li class="click"><img src="repeat_one.png" width="9px" alt="전체반복" id="repeatOneSong"> 한곡반복</li>
+           </ul>
+       </div>
+       <div class="empty">
+           <div><img src="empty.png" alt="empty 아이콘" width="30px"></div>
+           <span>MAKE YOUR OWN PLAYER</span>
+       </div>
+   </div> 
 
-
+</div>
 </body>
 
 </html>

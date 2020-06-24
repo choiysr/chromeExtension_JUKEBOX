@@ -7,7 +7,7 @@ const API_Server = new URL('http://localhost:8080/');
 function makeMusicChartListTag(song) {
     let listStr = '';
     song.forEach((song, index) => {
-        listStr += '<ul><li class="w20">' + song.ranking + '</li>'
+        listStr += '<ul class="eachSong"><li class="w20">' + song.ranking + '</li>'
             + '<li class="w50 rd"><img src="' + song.thumbnail + '" width="40px" alt="album art"></li>'
             + '<li class="w135 lf"><span class="title-span">' + song.title + '</span><div class="artist"><span class="singer-span">' + song.singer + '</span></div></li>'
             + '<li class="w28 click play-now" data-sid="' + song.sid + '" data-youtubeId="' + song.youtubeId + '"><img src="play_list.png" alt="재생" width="12px"></li>'
@@ -71,12 +71,38 @@ function addMusicIntoPlayList(target, play) {
     // 리스트에 아무곡도 들어있지 않았던 경우 리스트영역을 띄우고 리스트에 들어온 가장 첫곡을 재생시킨다. 
     // undefine 고려해서 조건문 수정할것!!!! 
     if (currentListCount == 0) {
-        // 리스트 영역을 띄운후
+        $('.no_right').css('display', 'none');
+        $('.right').css('display','inline-block');
         onPlay(1);
     }
     else if (currentListCount != 0 && play == 'play') {
         onPlay(currentListCount + 1);
     }
+}
+
+
+
+function addAllMusicIntoPlayList(play) {
+    let $myListDiv = $('.myPlaylist');
+    let $chartList = $(".bottom > ul");
+    console.log($chartList);
+    // ★★★★★★★★★★★★★★★★★★★★★★★~6/24 확인해서 각 ul에서 아래
+    // song에 필요한 데이터들 셀렉해서 삽입해줘야함. 
+    let sids = [];
+    let songArr = [];
+    let isFirstPlay = $('.listCount').length == 0;
+
+    // 로그인 조건문 추가
+    $chartList.each(function (index, item) {
+        song = {
+            'sid': item.id,
+            'youtubeId': item.dataset.youtubeid,
+            'title': item.dataset.title,
+            'singer': item.dataset.singer
+        }
+        songArr.push(song);
+    })
+
 }
 
 
@@ -87,9 +113,14 @@ $(document).ready(() => {
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     getMusicChartList('realtime', 1);
-    onPlay();
+    // ajax 호출해서 플레이리스트 불러오는 코드 삽입 !!!!!!!!!!
+    let currentListCount = $('.listCount').length;
+    if (currentListCount != 0) {
+        // 리스트 영역을 띄운후 제일 첫곡 재생
+    }
 
     // 상단 차트타입 선택시 이벤트 
+    // function 따로 뺄것 
     $('#chartTypes').on('click', 'li', function (e) {
         // 로고 and 로그인 버튼 클릭 이벤트 설정하기!!!!!!!!!!!!!!!!!!!
         $('.left').scrollTop(0);
@@ -120,8 +151,23 @@ $(document).ready(() => {
     $('.play-now').on('click', function (e) {
         e.preventDefault;
         addMusicIntoPlayList(this, 'play');
-
     });
+
+    // 차트에서 전체듣기 버튼 눌렀을 때
+    $("#playAll").on('click',(e)=>{
+        e.preventDefault;
+        addAllMusicIntoPlayList();
+    })
+
+    // 차트에서 전체추가 버튼 눌렀을 때
+    $("#addAll").on('click',(e)=>{
+        e.preventDefault;
+    })
+
+
+
+
+    
 
 
 
