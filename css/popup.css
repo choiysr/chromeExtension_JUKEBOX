@@ -213,6 +213,7 @@ input[type="checkbox"] {
 .right .list_box .list > ul > li:nth-child(2) {
     overflow: hidden;
     white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .right {
@@ -280,27 +281,24 @@ input[type="checkbox"] {
 
 /*잘린 글자 움직이게*/
 
-.left .list .bottom > ul > li:nth-child(3),
-.right .list_box .list > ul > li:nth-child(2){
-    overflow: hidden;
-    position: relative;
-    background: red;
-    text-overflow: ellipsis;
-    height: auto;
-    white-space: nowrap;
-}
+/*.left .list .bottom > ul > li:nth-child(3),*/
+/*.right .list_box .list > ul > li:nth-child(2) {*/
+/*    position: relative;*/
+/*    background: red;*/
+/*    text-overflow: ellipsis;*/
+/*    height: auto;*/
+/*    white-space: nowrap;*/
+/*}*/
 
-.left .list .bottom > ul > li:nth-child(3) > span,
-.right .list_box .list > ul > li:nth-child(2) > span {
-    transition: transform .5s;
-    transform: translate(0, 0);
-}
+/*.left .list .bottom > ul > li:nth-child(3) > span,*/
+/*.right .list_box .list > ul > li:nth-child(2) > span {*/
+/*    position: relative;*/
+/*    transition: transform .5s;*/
+/*    transform: translate(0, 0);*/
+/*}*/
 
-.left .list .bottom > ul > li:nth-child(3) > span:hover,
-.right .list_box .list > ul > li:nth-child(2) > span:hover {
-    position: absolute;
-    left: 0;
-    top: 0;
-    transition: transform 2s;
-    transform: translate(calc(-30%), 0);
-}
+/*.left .list .bottom > ul > li:nth-child(3) > span:hover,*/
+/*.right .list_box .list > ul > li:nth-child(2) > span:hover {*/
+/*    transition: transform 2s;*/
+/*    transform: translate(calc(-30%), 0);*/
+/*}*/

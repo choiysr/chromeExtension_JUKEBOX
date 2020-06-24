@@ -32,7 +32,7 @@ function makeMusicChartListTag(song) {
     song.forEach((song, index) => {
         listStr += '<ul><li class="w20">' + song.ranking + '</li>'
             + '<li class="w50 rd"><img src="' + song.thumbnail + '" width="40px" alt="album art"></li>'
-            + '<li class="w140 lf">' + song.title + '<div class="artist">' + song.singer + '</div></li>'
+            + '<li class="w135 lf">' + song.title + '<div class="artist">' + song.singer + '</div></li>'
             + '<li class="w28 click" data-sid="' + song.sid + '"><img src="play_list.png" alt="재생" width="12px"></li>'
             + '<li class="w28 click" data-sid="' + song.sid + '"><img src="plus_list.png" alt="추가" width="12px"></li></ul>'
     })
