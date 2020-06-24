@@ -9,7 +9,7 @@ function makeMusicChartListTag(song) {
     song.forEach((song, index) => {
         listStr += '<ul><li class="w20">' + song.ranking + '</li>'
             + '<li class="w50 rd"><img src="' + song.thumbnail + '" width="40px" alt="album art"></li>'
-            + '<li class="w135 lf"><span>' + song.title + '</span><div class="artist"><span>' + song.singer + '</span></div></li>'
+            + '<li class="w135 lf"><span class="title-span">' + song.title + '</span><div class="artist"><span class="singer-span">' + song.singer + '</span></div></li>'
             + '<li class="w28 click play-now" data-sid="' + song.sid + '" data-youtubeId="'+song.youtubeId+'"><img src="play_list.png" alt="재생" width="12px"></li>'
             + '<li class="w28 click add-only" data-sid="' + song.sid + '" data-youtubeId="'+song.youtubeId+'"><img src="plus_list.png" alt="추가" width="12px"></li></ul>'
     })
@@ -19,11 +19,13 @@ function makeMusicChartListTag(song) {
 // 플레이리스트 태그를 만들어서 문자열 형태로 반환하는 function
 function makeMyListTag(song) {
     let listStr = '';
+    let listCount = $('.listCount').length;
     song.forEach((song,index)=> {
-        listStr += '<li class="w20"><input type="checkbox" id="chk_'+song.sid+'" data-sid="'+song.sid+' data-youtubeId="'+song.youtubeId+'">'
-            + '<label for="chk'+song.sid+'"></label></li>'
-            + '<li class="w220 lf">'+song.title+'<div class="artist">'+song.singer+'</div></li>'
-            + '<li class="w28 click"><img src="close.png" alt="삭제" width="9px"></li>';
+        listStr += '<ul><li class="w20 listCount"><input type="checkbox" id="chk_'+song.sid+'" value="'+(listCount+1)+'" data-idx="'+(listCount+1)+'" data-sid="'+song.sid+' data-youtubeId="'+song.youtubeId+'" data-pid="'+song.pid+'">'
+            + '<label for="chk_'+song.sid+'"></label></li>'
+            + '<li class="w200 lf"><span>'+song.title+'</span><div class="artist"><span>'+song.singer+'</span></div></li>'
+            + '<li class="w28 click"><img src="close.png" alt="삭제" width="9px"></li></ul>';
+            ++listCount;
     })
     return listStr;
 }
@@ -62,7 +64,6 @@ $(document).ready(() => {
         let type = this.dataset.id;
         let $chartText = $("#chartText");
         if (type != null) {
-            console.log('null이 아님')
             if (type == 'realtime') {
                 $chartText.text('실시간차트')
             } else if (type == 'daily') {
@@ -79,8 +80,21 @@ $(document).ready(() => {
     // 차트에서 각 노래 추가 버튼 이벤트
     $(".add-only").on('click', function(e){
         e.preventDefault;
-        let targetSid = this.dataset.id;
-        console.log(this);
+        let $target = $(this);
+        let $listDiv = $(".list");
+        let currentListCount = $('.listCount').length;
+        let songArr = [];
+        // 로그인정보 삽입시 pid 수정 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        let pid = ''; 
+        song = {
+            'pid': pid,
+            'sid': $target.data('sid'),
+            'youtubeId': $target.data('youtubeId'),
+            'title': $target.parent().find('.title-span').text(),
+            'singer':  $target.parent().find('.singer-span').text()
+        };
+        songArr.push(song);
+        $listDiv.append(makeMyListTag(songArr));
     })
     
 
