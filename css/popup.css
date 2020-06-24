@@ -165,7 +165,7 @@ input[type="checkbox"] {
 }
 
 .left .list .sub .all,
-.right .toolbar > ul {
+.sub_02 > ul {
     text-decoration: none;
     text-indent: 0;
     line-height: 25px;
@@ -216,7 +216,8 @@ input[type="checkbox"] {
     text-overflow: ellipsis;
 }
 
-.right {
+.right,
+.no_right {
     background: #fff;
     border-radius: 10px;
     width: 285px;
@@ -228,13 +229,13 @@ input[type="checkbox"] {
     margin-left: 15px;
 }
 
-.right .sub_02 {
-    margin: 0 0 17px;
+.sub_02 > h2 {
+    text-align: center;
+    margin-bottom: 10px;
 }
 
-.right .sub_02 > h2 {
-    text-align: center;
-    margin-bottom: 15px;
+.sub_02 > ul {
+    margin-bottom: 6px;
 }
 
 .right .video {
@@ -242,22 +243,23 @@ input[type="checkbox"] {
     width: 285px;
     height: 187px;
     /* video 250*187 */
-    margin: 0 auto;
+    margin-left: -10px;
 
 }
 
-.right .toolbar {
+.sub_02 {
     border-bottom: 1px solid #d9d9d9;
     width: 265px;
     margin-left: 10px;
+    margin-bottom: 10px;
 }
 
 
-.right .toolbar > ul > li {
-    margin: 0 0 10px 10px;
+.sub_02 > ul > li {
+    margin: 0 0 0 10px;
 }
 
-.right .toolbar > ul > li:first-child {
+.sub_02 > ul > li:first-child {
     margin-left: 2px;
 }
 
@@ -276,6 +278,28 @@ input[type="checkbox"] {
 
 .clicked {
     font-weight: bold;
+}
+
+
+
+/*리스트 없음*/
+.no_right {
+    position: relative;
+    height: 532px;
+}
+
+.no_right .empty {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 11px;
+    color: #999;
+}
+
+.no_right .empty > div {
+    text-align: center;
+    margin-bottom: 5px;
 }
 
 
