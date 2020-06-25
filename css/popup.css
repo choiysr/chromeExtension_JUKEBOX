@@ -302,6 +302,27 @@ input[type="checkbox"] {
     margin-bottom: 5px;
 }
 
+#chartText {
+    margin-bottom: 1px !important;
+}
+
+#standardDate {
+    text-align: center;
+    color: #999;
+    margin-bottom: 3px;
+}
+
+.currPlaying {
+    color: black;
+    font-weight: bold;
+}
+
+.setRepeat {
+    font-weight: bold;
+}
+
+
+
 
 /*잘린 글자 움직이게*/
 

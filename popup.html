@@ -16,22 +16,23 @@
     <div class="top">
         <ul id="chartTypes">
             <li class="w50 ct"><img src="logo.png" width="15px" alt="로고"></li>
-            <li class="w50 ct click chartType" data-id="realtime">실시간</li>
-            <li class="w50 ct click chartType" data-id="daily">일간</li>
-            <li class="w50 ct click chartType" data-id="weekly">주간</li>
-            <li class="w50 ct click chartType" data-id="monthly">월간</li>
-            <li class="w50 ct">로그인</li>
+            <li class="w50 ct click chartType" data-id="realtime">REALTIME</li>
+            <li class="w50 ct click chartType" data-id="daily">DAILY</li>
+            <li class="w50 ct click chartType" data-id="weekly">WEEKLY</li>
+            <li class="w50 ct click chartType" data-id="monthly">MONTHLY</li>
+            <li class="w50 ct">SIGN-IN</li>
         </ul>
     </div>
     <div class="left fl">
         <div class="list">
             <div class="sub">
-                <h2 id="chartText">실시간 차트</h2>
+                <h2 id="chartText">REALTIME CHART</h2>
+                <div id="standardDate"><span>As of 10:00 KST</span></div>
                 <div class="all play click" id="playAll"><img src="play.png" width="9px" alt="재생"> PLAY ALL</div>
                 <div class="all fill click" id="addAll"><img src="plus.png" width="9px" alt="추가"> ADD ALL</div>
             </div>
             <div class="bottom">
-                <ul>
+                <!-- <ul>
                     <li class="w20">1</li>
                     <li class="w50 rd"><img
                             src="https://cdnimg.melon.co.kr/cm/album/images/101/17/789/10117789_500.jpg/melon/resize/120/quality/80/optimize"
@@ -41,7 +42,7 @@
                     </li>
                     <li class="w28 click"><img src="play_list.png" alt="재생" width="12px" data-sid="test1"></li>
                     <li class="w28 click"><img src="plus_list.png" alt="추가" width="12px"></li>
-                </ul>
+                </ul> -->
             </div>
         </div>
     </div>
@@ -52,10 +53,10 @@
                 <div id="player"></div>
             </div>
                 <ul>
-                    <li class="click"><img src="tick.png" width="9px" alt="선택" id="checkAll"> SELECT ALL</li>
-                    <li class="click"><img src="delete.png" width="9px" alt="삭제" id="deleteAll"> DELETE</li>
-                    <li class="click"><img src="repeat.png" width="9px" alt="전체반복" id="repeatAll"> REPEAT ALL</li>
-                    <li class="click"><img src="repeat_one.png" width="9px" alt="전체반복" id="repeatOneSong"> REPEAT ONE</li>
+                    <li class="click" id="selectAll" data-isSelected=false><img src="tick.png" width="9px" alt="선택"> Select All</li>
+                    <li class="click" id="deleteAll"><img src="delete.png" width="9px" alt="삭제"> Delete</li>
+                    <li class="click" id="repeatAll" data-isChecked=false><img src="repeat.png" width="9px" alt="전체반복"> Repeat All</li>
+                    <li class="click" id="repeatOne" data-isChecked=false><img src="repeat_one.png" width="9px" alt="전체반복"> Repeat One</li>
                 </ul>
             </div>
             <div class="list_box">
@@ -71,15 +72,15 @@
         <div class="sub_02">
             <h2>Music Player</h2>
             <ul>
-                <li class="click"><img src="tick.png" width="9px" alt="선택" id="checkAll"> 전체선택</li>
-                <li class="click"><img src="delete.png" width="9px" alt="삭제" id="deleteAll"> 선택삭제</li>
-               <li class="click"><img src="repeat.png" width="9px" alt="전체반복" id="repeatAll"> 전체반복</li>
-               <li class="click"><img src="repeat_one.png" width="9px" alt="전체반복" id="repeatOneSong"> 한곡반복</li>
+                <li class="click no-list"><img src="tick.png" width="9px" alt="선택"> SELECT ALL</li>
+                <li class="click no-list"><img src="delete.png" width="9px" alt="삭제"> DELETE</li>
+               <li class="click no-list"><img src="repeat.png" width="9px" alt="전체반복"> REPEAT ALL</li>
+               <li class="click no-list"><img src="repeat_one.png" width="9px" alt="전체반복"> REPEAT ONE</li>
            </ul>
        </div>
        <div class="empty">
            <div><img src="empty.png" alt="empty 아이콘" width="30px"></div>
-           <span>MAKE YOUR OWN PLAYER</span>
+           <span>MAKE YOUR OWN PLAYLIST</span>
        </div>
    </div> 
 
