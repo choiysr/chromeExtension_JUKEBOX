@@ -18,7 +18,6 @@ function onPlay(targetIdx) {
     currentPlayingIdx = targetIdx;
     let youtubeId = $('[data-idx="' + targetIdx + '"]').data('youtubeid');
     if (player == null) {
-        console.log("플레이어 객체 생성");
         setTimeout(() => {
             player = new YT.Player('player', {
                 height: '187',
@@ -113,7 +112,7 @@ function makeMyListTag(song) {
         listStr += '<ul><li class="w20 listCount"><input type="checkbox" class="listCheckbox" id="chk_' + song.sid + '" value="' + (listCount + 1) + '" data-idx="' + (listCount + 1) + '" data-sid="' + song.sid + '" data-youtubeId="' + song.youtubeId + '" data-pid="' + song.pid + '">'
             + '<label for="chk_' + song.sid + '"></label></li>'
             + '<li class="w200 lf click playThis"><span class="songInfo">' + song.title + '</span><div class="artist"><span class="songInfo">' + song.singer + '</span></div></li>'
-            + '<li class="w28 click"><img src="close.png" alt="삭제" width="9px"></li></ul>';
+            + '<li class="w28 click"><img src="close.png" class="deleteOne" alt="삭제" width="9px"></li></ul>';
         ++listCount;
     })
     return listStr;
@@ -207,7 +206,7 @@ function currSongColorChange(idx) {
     $('.songInfo').removeClass('currPlaying');
     $lists.each(function (index, item) {
         $item = $(item);
-        if (idx == $item.data('idx')) {
+        if (idx == $item.attr('data-idx')) {
             $item.parent().parent().find('.songInfo').addClass('currPlaying');
         }
     })
@@ -219,7 +218,7 @@ function setRepeatUp(allorOne) {
     let $target = "";
     let $another = "";
 
-    if(allorOne =='all') {
+    if (allorOne == 'all') {
         $target = $('#repeatAll');
         $another = $('#repeatOne');
     } else {
@@ -241,18 +240,88 @@ function setRepeatUp(allorOne) {
 
 
 // 스크롤 테스트 
-function fnMove(){
-    var offset = $('.currPlaying').offset();
-    console.log($('.currPlaying').offset())
-    $('.list_box').animate({scrollTop : offset.top}, 400);
+function fnMove() {
+    var position = $('.currPlaying').position();
+    console.log("포지션 : "+$('.currPlaying').position())
+    $('.list_box').animate({ scrollTop: position.top }, 400);
 }
+
+
+// 삭제 대상 곡의 객체를 반환하는 function 
+function getSongObjArr($targetSong) {
+    let $songObjArr = [];
+    if ($targetSong == undefined || $targetSong == '') {
+        $('.listCheckbox:checked').each(function () {
+            let $targetSong = $('[data-idx="' + $(this).val() + '"]');
+            $songObjArr.push($targetSong);
+        })
+    } else {
+        $songObjArr.push($targetSong);
+    }
+    return $songObjArr;
+}
+
+function removeSongInMyList($targetSong) {
+
+    function removeTags(targetObjs) {
+        targetObjs.forEach((item, index) => {
+            $(item).parent().parent().remove();
+        })
+    }
+
+    let targetObjs = getSongObjArr($targetSong);
+    let pids = [];
+    let removeIdx = [];
+    let curIdx = 0;
+    let compareIdx = currentPlayingIdx;
+
+    targetObjs.forEach((item, index) => {
+        pids.push(item.data('pid'));
+        if (item.data('idx') < currentPlayingIdx) {
+            curIdx++;
+        }
+        removeIdx.push(item.data('idx'));
+    });
+
+    // 로그인 구분 조건 추가 !!!!!!!!!!
+    removeTags(targetObjs);
+
+    let $allMySongs = $('.listCheckbox');
+
+    $allMySongs.each(function (index, item) {
+        let $myMusic = $(item);
+        $myMusic.attr('data-idx', index+1);
+        $myMusic.val(index + 1);
+    })
+
+    //삭제한 동영상 중지후 다음곡 재생
+    var containsIdx = removeIdx.includes(currentPlayingIdx);
+
+    if ($targetSong == undefined || $targetSong == '') {
+        currentPlayingIdx -= curIdx;
+    } else if ($targetSong.data('idx') < currentPlayingIdx) {
+        currentPlayingIdx--;
+    }
+
+    if ((containsIdx || compareIdx == $targetSong.data('idx'))) {
+        stopVideo();
+        playNext(currentPlayingIdx);
+    }
+
+    if ($allMySongs.length == 0) {
+        // hidePlayerArea();
+    }
+}
+
+
+
 
 
 
 $(document).ready(() => {
     // 2. This code loads the IFrame Player API code asynchronously.
     var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
+    tag.src = 'https://www.youtube.com/iframe_api';
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     getMusicChartList('realtime', 1);
@@ -312,6 +381,18 @@ $(document).ready(() => {
     $(document).on('click', '.playThis', function () {
         onPlay($(this).parent().find('input').data('idx'));
     });
+
+    // 플레이리스트에서 X버튼 눌렀을 때
+    $(document).on('click', '.deleteOne', function () {
+        removeSongInMyList($(this).parent().prev().prev().children('input'))
+    });
+
+    // Delete All 버튼을 눌렀을 때
+    $("#deleteAll").on('click', (e) => {
+        e.preventDefault();
+        removeSongInMyList();
+    })
+
 
     // Select All 버튼을 눌렀을 때 모든 곡을 체크/체크해제
     $("#selectAll").on('click', (e) => {
