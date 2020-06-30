@@ -99,7 +99,6 @@ function getServerTime() {
 // 시간 비교
 function compareBothTime(time1, time2) {
     let result = (time1.format('MM-DD HH') == time2.format('MM-DD HH'));
-    console.log("시간비교결과 : " + result)
     return result;
 }
 
@@ -175,8 +174,6 @@ function getMusicChartList(type, page) {
         changeMenuColor();
     }
 
-    console.log('servertime')
-    console.log(serverTime)
 
     switch (type) {
         case 'realtime':
@@ -199,7 +196,6 @@ function getMusicChartList(type, page) {
 
 // Chart 리스트의 곡 추가 버튼을 눌렀을때 Player에 추가해주는 function
 function addMusicIntoPlayList(target, play) {
-    console.log("--func실행")
     let $target = $(target);
     let $listDiv = $(".myPlaylist");
     let currentListCount = $('.listCount').length;
@@ -241,7 +237,6 @@ function addAllMusicIntoPlayList(play) {
     // 로그인 조건문 추가
     $chartList.each(function (index, item) {
         let $item = $(item);
-        console.log("1")
         song = {
             'sid': $item.find('li').last().data('sid'),
             'youtubeId': $item.find('li').last().data('youtubeid'),
@@ -423,7 +418,7 @@ $(document).ready(() => {
 
     // 차트에서 각 노래 추가 버튼 이벤트
     $('.add-only').on('click', function (e) {
-        e.preventDefault;
+        e.preventDefault();
         addMusicIntoPlayList(this);
     })
 
