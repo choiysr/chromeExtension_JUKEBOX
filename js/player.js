@@ -1,11 +1,7 @@
 var player;
 var currentPlayingIdx;
-var REALTIME_TXT = "";
-var DAILY_TXT = "";
-var WEEKLY_TXT = "";
-var MONTHLY_TXT = "";
-var currentTime = "";
-var today = "";
+var serverTime = '';
+var CHART = new Chart();
 
 
 const API_Server = new URL('http://localhost:8080/');
@@ -90,6 +86,36 @@ function hidePlayList() {
     $('.no_right').css('display', 'inline-block');
 }
 
+// 서버시간 가져오기
+function getServerTime() {
+    let serverTime = "";
+    ajaxService.getAjax(API_Server.get("serverTime"), (result) => {
+        // serverTime = new Date(result);
+        serverTime = moment(result);
+    })
+    return serverTime;
+}
+
+// 시간 비교
+function compareBothTime(time1, time2) {
+    let result = (time1.format('MM-DD HH') == time2.format('MM-DD HH'));
+    console.log("시간비교결과 : " + result)
+    return result;
+}
+
+// 가져온 type별 데이터를 CHART객체에 set하고(첫 로딩), CHART객체에서 가져온 차트리스트를 화면에 뿌려주는 function 
+function setTypeTXTandShowChart(type, content) {
+    let $musicChartDiv = $('.bottom');
+    if (content == '' || content == undefined) {
+        // 기존 데이터를 불러와야 하는 경우 
+        $musicChartDiv.html(makeMusicChartListTag(CHART.getTypeObj(type)));
+    } else {
+        // 첫로딩
+        CHART.setTypeObj(type, content);
+        $musicChartDiv.html(makeMusicChartListTag(CHART.getTypeObj(type)));
+    }
+}
+
 
 // 음악차트 리스트 태그를 만들어서 문자열 형태로 반환하는 function
 function makeMusicChartListTag(song) {
@@ -109,8 +135,8 @@ function makeMyListTag(song) {
     let listStr = '';
     let listCount = $('.listCount').length;
     song.forEach((song, index) => {
-        listStr += '<ul><li class="w20 listCount"><input type="checkbox" class="listCheckbox" id="chk_' + song.sid + '" value="' + (listCount + 1) + '" data-idx="' + (listCount + 1) + '" data-sid="' + song.sid + '" data-youtubeId="' + song.youtubeId + '" data-pid="' + song.pid + '">'
-            + '<label for="chk_' + song.sid + '"></label></li>'
+        listStr += '<ul><li class="w20 listCount"><input type="checkbox" class="listCheckbox" id="chk_' + (listCount + 1) + '" value="' + (listCount + 1) + '" data-idx="' + (listCount + 1) + '" data-sid="' + song.sid + '" data-youtubeId="' + song.youtubeId + '" data-pid="' + song.pid + '">'
+            + '<label for="chk_' + (listCount + 1) + '"></label></li>'
             + '<li class="w200 lf click playThis"><span class="songInfo">' + song.title + '</span><div class="artist"><span class="songInfo">' + song.singer + '</span></div></li>'
             + '<li class="w28 click"><img src="close.png" class="deleteOne" alt="삭제" width="9px"></li></ul>';
         ++listCount;
@@ -119,12 +145,13 @@ function makeMyListTag(song) {
 }
 
 // TYPE별 음악 차트를 가져오고, 화면에 태그를 뿌려주는 function 
-function getMusicChartList(type, page, isFirst) {
+function getMusicChartList(type, page) {
     $('.left').scrollTop(0);
-    console.log(new Date().getHours())
-    function success(result) {
-        let $musicChartDiv = $('.bottom');
-        $musicChartDiv.html(makeMusicChartListTag(result.content));
+    let $musicChartDiv = $('.bottom');
+    let standardTimeText = 'As of ';
+    let todayCurrTime = moment();
+
+    function changeMenuColor() {
         $('.chartType').each(function (index, item) {
             if (item.dataset.id != type) {
                 $('[data-id="' + item.dataset.id + '"]').removeClass('clicked');
@@ -134,7 +161,40 @@ function getMusicChartList(type, page, isFirst) {
         })
     }
 
-    ajaxService.getAjax(API_Server.commonURL + 'musicChartList/' + type + '/' + page, success);
+
+    // 시간 셋팅이 안되어있거나(첫 로딩이거나) 시간이 변경되었을 경우 새로운 리스트를 받아오고, 리스트를 저장한다. 
+    if (serverTime == '' || serverTime == undefined
+        || !(compareBothTime(serverTime, todayCurrTime)) || CHART.getTypeObj(type) == '') {
+        serverTime = getServerTime();
+        ajaxService.getAjax(API_Server.get('musicChartList/' + type + '/' + page), (result) => {
+            setTypeTXTandShowChart(type, result.content);
+            changeMenuColor();
+        });
+    } else {
+        setTypeTXTandShowChart(type);
+        changeMenuColor();
+    }
+
+    console.log('servertime')
+    console.log(serverTime)
+
+    switch (type) {
+        case 'realtime':
+            standardTimeText += serverTime.format('HH') +':00'+ ' KST';
+            break;
+        case 'daily':
+            standardTimeText += serverTime.subtract('1', 'd').format('MMMM DD');
+            break;
+        case 'weekly':
+            let lastMonday = serverTime.subtract(1, 'weeks').startOf('isoWeek');
+            standardTimeText += lastMonday.format('MMMM DD') + ' - ' + lastMonday.add(6, 'd').format('MMMM DD');
+            break;
+        case 'monthly':
+            standardTimeText += serverTime.subtract('1', 'M').format('MMMM');
+            break;
+    }
+    $('#standardDate > span').text(standardTimeText);
+
 }
 
 // Chart 리스트의 곡 추가 버튼을 눌렀을때 Player에 추가해주는 function
@@ -210,7 +270,7 @@ function currSongColorChange(idx) {
             $item.parent().parent().find('.songInfo').addClass('currPlaying');
         }
     })
-    fnMove()
+    //fnMove()
 }
 
 // 전체반복/한곡반복 설정 
@@ -239,12 +299,12 @@ function setRepeatUp(allorOne) {
 }
 
 
-// 스크롤 테스트 
-function fnMove() {
-    var position = $('.currPlaying').position();
-    console.log("포지션 : "+$('.currPlaying').position())
-    $('.list_box').animate({ scrollTop: position.top }, 400);
-}
+//스크롤 테스트 
+// function fnMove() {
+//     var position = $('.currPlaying').position();
+//     console.log("포지션 : "+$('.currPlaying').position())
+//     $('.list_box').animate({ scrollTop: position.top }, 400);
+// }
 
 
 // 삭제 대상 곡의 객체를 반환하는 function 
@@ -261,8 +321,10 @@ function getSongObjArr($targetSong) {
     return $songObjArr;
 }
 
+// 플레이리스트에서 곡을 삭제시키는 function 
 function removeSongInMyList($targetSong) {
 
+    // 태그삭제 
     function removeTags(targetObjs) {
         targetObjs.forEach((item, index) => {
             $(item).parent().parent().remove();
@@ -290,8 +352,10 @@ function removeSongInMyList($targetSong) {
 
     $allMySongs.each(function (index, item) {
         let $myMusic = $(item);
-        $myMusic.attr('data-idx', index+1);
+        $myMusic.attr('data-idx', index + 1);
+        $myMusic.attr('id', 'chk_' + (index + 1));
         $myMusic.val(index + 1);
+        $myMusic.next('label').attr('for', 'chk_' + (index + 1))
     })
 
     //삭제한 동영상 중지후 다음곡 재생
@@ -305,11 +369,15 @@ function removeSongInMyList($targetSong) {
 
     if ((containsIdx || compareIdx == $targetSong.data('idx'))) {
         stopVideo();
+        let listCount = $('.listCount').length;
+        if (currentPlayingIdx > listCount) {
+            currentPlayingIdx = listCount;
+        }
         playNext(currentPlayingIdx);
     }
 
     if ($allMySongs.length == 0) {
-        // hidePlayerArea();
+        hidePlayList();
     }
 }
 

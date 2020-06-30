@@ -52,15 +52,3 @@ const ajaxService = (function () {
 
 })();
 
-
-class URL {
-
-    constructor(commonURL) {
-        this.commonURL = commonURL;
-    }
-
-    get(value) {
-        return this.commonURL + value;
-    }
-
-}
