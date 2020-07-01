@@ -88,17 +88,20 @@ function hidePlayList() {
 
 // 서버시간 가져오기
 function getServerTime() {
-    let serverTime = "";
+    let timeobj;
     ajaxService.getAjax(API_Server.get("serverTime"), (result) => {
-        // serverTime = new Date(result);
-        serverTime = moment(result);
+        timeobj = moment(result).format();
     })
-    return serverTime;
+    return timeobj;
 }
 
 // 시간 비교
 function compareBothTime(time1, time2) {
-    let result = (time1.format('MM-DD HH') == time2.format('MM-DD HH'));
+    console.log("시간비교")
+    console.log(moment(time1).format('MM-DD HH') )
+    console.log(moment(time2).format('MM-DD HH'))
+    let result = (moment(time1).format('MM-DD HH') == moment(time2).format('MM-DD HH'));
+    console.log(result)
     return result;
 }
 
@@ -148,7 +151,7 @@ function getMusicChartList(type, page) {
     $('.left').scrollTop(0);
     let $musicChartDiv = $('.bottom');
     let standardTimeText = 'As of ';
-    let todayCurrTime = moment();
+    let todayCurrTime = moment().format();
 
     function changeMenuColor() {
         $('.chartType').each(function (index, item) {
@@ -160,8 +163,8 @@ function getMusicChartList(type, page) {
         })
     }
 
-
-    // 시간 셋팅이 안되어있거나(첫 로딩이거나) 시간이 변경되었을 경우 새로운 리스트를 받아오고, 리스트를 저장한다. 
+    // 시간 셋팅이 안되어있거나(첫 로딩이거나) 시간이 변경되었을 경우 새로운 리스트를 받아오고, 리스트를 저장한다.
+    // ☆이거 이상하게 동작함 수정 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  --- 서버시간 가져오는 곳 이상 
     if (serverTime == '' || serverTime == undefined
         || !(compareBothTime(serverTime, todayCurrTime)) || CHART.getTypeObj(type) == '') {
         serverTime = getServerTime();
@@ -177,17 +180,17 @@ function getMusicChartList(type, page) {
 
     switch (type) {
         case 'realtime':
-            standardTimeText += serverTime.format('HH') +':00'+ ' KST';
+            standardTimeText += moment(serverTime).format('HH') +':00'+ ' KST';
             break;
         case 'daily':
-            standardTimeText += serverTime.subtract('1', 'd').format('MMMM DD');
+            standardTimeText += moment(serverTime).subtract('1', 'd').format('MMMM DD');
             break;
         case 'weekly':
-            let lastMonday = serverTime.subtract(1, 'weeks').startOf('isoWeek');
+            let lastMonday = moment(serverTime).subtract(1, 'weeks').startOf('isoWeek');
             standardTimeText += lastMonday.format('MMMM DD') + ' - ' + lastMonday.add(6, 'd').format('MMMM DD');
             break;
         case 'monthly':
-            standardTimeText += serverTime.subtract('1', 'M').format('MMMM');
+            standardTimeText += moment(serverTime).subtract('1', 'M').format('MMMM');
             break;
     }
     $('#standardDate > span').text(standardTimeText);
@@ -398,26 +401,33 @@ $(document).ready(() => {
     // function 따로 뺄것 
     $('#chartTypes').on('click', 'li', function (e) {
         // 로고 and 로그인 버튼 클릭 이벤트 설정하기!!!!!!!!!!!!!!!!!!!
+        console.log("버튼클릭이벤트")
         $('.left').scrollTop(0);
         e.preventDefault();
         let type = this.dataset.id;
         let $chartText = $("#chartText");
-        if (type != null) {
+        console.log(type)
+        if (type != null && type != 'sign-in') {
             if (type == 'realtime') {
                 $chartText.text('REALTIME CHART')
             } else if (type == 'daily') {
                 $chartText.text('DAILY CHART')
             } else if (type == 'weekly') {
                 $chartText.text('WEEKLY CHART')
-            } else {
+            } else if (type =='monthly'){
                 $chartText.text('MONTHLY CHART')
-            }
+            } 
             getMusicChartList(type, 1);
-        }
+        } else if (type == 'sign-in') {
+            ajaxService.getAjax()
+            let loginurl = 'oauth2/authorization/google';
+            window.open(API_Server.get(loginurl),'_self');
+         }
     })
 
     // 차트에서 각 노래 추가 버튼 이벤트
     $('.add-only').on('click', function (e) {
+        console.log("---?")
         e.preventDefault();
         addMusicIntoPlayList(this);
     })
