@@ -397,6 +397,9 @@ $(document).ready(() => {
         // 리스트 영역을 띄운후 제일 첫곡 재생
     }
 
+    let test333 = sessionStorage.getItem("userName"); 
+    console.log(test333);
+
     // 상단 차트타입 선택시 이벤트 
     // function 따로 뺄것 
     $('#chartTypes').on('click', 'li', function (e) {
@@ -420,8 +423,13 @@ $(document).ready(() => {
             getMusicChartList(type, 1);
         } else if (type == 'sign-in') {
             ajaxService.getAjax()
-            let loginurl = 'oauth2/authorization/google';
-            window.open(API_Server.get(loginurl),'_self');
+            let loginurl = 'http://localhost:8080/oauth2/authorization/google';
+            chrome.windows.create({
+                url: loginurl,
+                type: "popup",
+                height: 640,
+                width : 630 
+              });
          }
     })
 
@@ -486,6 +494,8 @@ $(document).ready(() => {
         e.preventDefault();
         setRepeatUp('one');
     })
+
+
 
 
 
