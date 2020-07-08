@@ -98,7 +98,7 @@ function getServerTime() {
 // 시간 비교
 function compareBothTime(time1, time2) {
     console.log("시간비교")
-    console.log(moment(time1).format('MM-DD HH') )
+    console.log(moment(time1).format('MM-DD HH'))
     console.log(moment(time2).format('MM-DD HH'))
     let result = (moment(time1).format('MM-DD HH') == moment(time2).format('MM-DD HH'));
     console.log(result)
@@ -180,7 +180,7 @@ function getMusicChartList(type, page) {
 
     switch (type) {
         case 'realtime':
-            standardTimeText += moment(serverTime).format('HH') +':00'+ ' KST';
+            standardTimeText += moment(serverTime).format('HH') + ':00' + ' KST';
             break;
         case 'daily':
             standardTimeText += moment(serverTime).subtract('1', 'd').format('MMMM DD');
@@ -385,6 +385,9 @@ function removeSongInMyList($targetSong) {
 
 
 $(document).ready(() => {
+    var port = chrome.extension.connect({
+        name: "connection"
+    });
     // 2. This code loads the IFrame Player API code asynchronously.
     var tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
@@ -397,7 +400,7 @@ $(document).ready(() => {
         // 리스트 영역을 띄운후 제일 첫곡 재생
     }
 
-    let test333 = sessionStorage.getItem("userName"); 
+    let test333 = sessionStorage.getItem("userName");
     console.log(test333);
 
     // 상단 차트타입 선택시 이벤트 
@@ -417,20 +420,26 @@ $(document).ready(() => {
                 $chartText.text('DAILY CHART')
             } else if (type == 'weekly') {
                 $chartText.text('WEEKLY CHART')
-            } else if (type =='monthly'){
+            } else if (type == 'monthly') {
                 $chartText.text('MONTHLY CHART')
-            } 
+            }
             getMusicChartList(type, 1);
         } else if (type == 'sign-in') {
-            ajaxService.getAjax()
             let loginurl = 'http://localhost:8080/oauth2/authorization/google';
-            chrome.windows.create({
-                url: loginurl,
-                type: "popup",
-                height: 640,
-                width : 630 
-              });
-         }
+            window.open(loginurl,'_blank');
+            // chrome.windows.create({
+            //     url: loginurl,
+            //     type: "popup",
+            //     height: 680,
+            //     width: 450
+            // }, function (window) {
+            //     console.log(window)
+            //     chrome.runtime.sendMessage({message: "hi"}, (response) => {
+            //         console.log(response.message);
+            //         window.open('','_self').close();     
+            //       });
+            // });
+        }
     })
 
     // 차트에서 각 노래 추가 버튼 이벤트

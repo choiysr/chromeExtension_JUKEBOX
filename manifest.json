@@ -9,7 +9,7 @@
     },
     "browser_action": {
       "default_icon" : "logo.png"
-    },
+    },  
     "content_security_policy": "script-src 'self' https://www.youtube.com/iframe_api https://s.ytimg.com/yts/jsbin/; object-src 'self'",
     "permissions": [
       "tabs",
