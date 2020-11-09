@@ -181,7 +181,7 @@ function getMusicChartList(type, page) {
 
     switch (type) {
         case 'realtime':
-            standardTimeText += moment(serverTime).format('HH') +':00'+ ' KST';
+            standardTimeText += moment(serverTime).format('HH') + ':00' + ' KST';
             break;
         case 'daily':
             standardTimeText += moment(serverTime).subtract('1', 'd').format('MMMM DD');
@@ -427,7 +427,6 @@ function removeSongInMyList($targetSong) {
 
 
 $(document).ready(() => {
-
     // 2. This code loads the IFrame Player API code asynchronously.
     var tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
@@ -454,6 +453,9 @@ $(document).ready(() => {
 
     } 
 
+    let test333 = sessionStorage.getItem("userName");
+    console.log(test333);
+
     // 상단 차트타입 선택시 이벤트 
     // function 따로 뺄것 
     $('#chartTypes').on('click', 'li', function (e) {
@@ -470,9 +472,9 @@ $(document).ready(() => {
                 $chartText.text('DAILY CHART')
             } else if (type == 'weekly') {
                 $chartText.text('WEEKLY CHART')
-            } else if (type =='monthly'){
+            } else if (type == 'monthly') {
                 $chartText.text('MONTHLY CHART')
-            } 
+            }
             getMusicChartList(type, 1);
         } else if (type == 'sign-in') {
             // [201107] 로그인 삭제 
@@ -542,6 +544,8 @@ $(document).ready(() => {
         e.preventDefault();
         setRepeatUp('one');
     })
+
+
 
 
 
