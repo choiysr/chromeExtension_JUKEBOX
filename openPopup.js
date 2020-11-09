@@ -5,7 +5,6 @@ chrome.browserAction.onClicked.addListener(function(tab) {
       height: 640,
       width : 630 
     }, function(win) {
-      console.log("--!!!SUCCESS!")
       // win represents the Window object from windows API
       // Do something after opening
     });

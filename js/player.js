@@ -4,7 +4,7 @@ var serverTime = '';
 var CHART = new Chart();
 
 
-const API_Server = new URL('http://localhost:8080/');
+const API_Server = new URL('http://ec2-54-180-90-141.ap-northeast-2.compute.amazonaws.com/');
 
 
 
@@ -91,17 +91,18 @@ function getServerTime() {
     let timeobj;
     ajaxService.getAjax(API_Server.get("serverTime"), (result) => {
         timeobj = moment(result).format();
-    })
+        console.log(result)
+    }, (result)=>{console.log(result)})
     return timeobj;
 }
 
 // 시간 비교
 function compareBothTime(time1, time2) {
-    console.log("시간비교")
-    console.log(moment(time1).format('MM-DD HH') )
-    console.log(moment(time2).format('MM-DD HH'))
+    // console.log("시간비교")
+    // console.log(moment(time1).format('MM-DD HH') )
+    // console.log(moment(time2).format('MM-DD HH'))
     let result = (moment(time1).format('MM-DD HH') == moment(time2).format('MM-DD HH'));
-    console.log(result)
+    // console.log(result)
     return result;
 }
 
@@ -203,18 +204,26 @@ function addMusicIntoPlayList(target, play) {
     let $listDiv = $(".myPlaylist");
     let currentListCount = $('.listCount').length;
     let songArr = [];
-    // 로그인정보 삽입시 pid 수정 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    let pid = '';
-    song = {
+    // 로그인정보 삽입시 pid 수정 
+    let pid = Math.random().toString(36).substr(2,11);
+    let song = {
         'pid': pid,
         'sid': $target.data('sid'),
-        // data속성은 소문자로 조회해야한다(?)
         'youtubeId': $target.data('youtubeid'),
         'title': $target.parent().find('.title-span').text(),
         'singer': $target.parent().find('.singer-span').text()
     };
     songArr.push(song);
     $listDiv.append(makeMyListTag(songArr));
+    // [201107] 추가한 곡을 LocalStorage에 저장
+    // 기존 리스트를 불러와서, 거기에 1곡을 추가하고 다시 저장. 
+    let orgSongArr = JSON.parse(localStorage.getItem("songlist"));
+    if(orgSongArr===null || orgSongArr==="") {
+        localStorage.setItem("songlist",JSON.stringify(songArr));
+    } else {
+        orgSongArr.push(song);
+        localStorage.setItem("songlist",JSON.stringify(orgSongArr));
+    }
 
     // 리스트에 아무곡도 들어있지 않았던 경우 리스트영역을 띄우고 리스트에 들어온 가장 첫곡을 재생시킨다. 
     // undefine 고려해서 조건문 수정할것!!!! 
@@ -240,7 +249,9 @@ function addAllMusicIntoPlayList(play) {
     // 로그인 조건문 추가
     $chartList.each(function (index, item) {
         let $item = $(item);
+        let pid = Math.random().toString(36).substr(2,11);
         song = {
+            'pid' : pid,
             'sid': $item.find('li').last().data('sid'),
             'youtubeId': $item.find('li').last().data('youtubeid'),
             'title': $item.children().find('.title-span').text(),
@@ -249,6 +260,20 @@ function addAllMusicIntoPlayList(play) {
         songArr.push(song);
     })
     $myListDiv.append(makeMyListTag(songArr))
+
+    // [201107] 추가한 곡을 LocalStorage에 저장
+    // 기존 리스트를 불러와서, 거기에 1곡을 추가하고 다시 저장. 
+    let orgSongArr = JSON.parse(localStorage.getItem("songlist"));
+    if(orgSongArr===null || orgSongArr==="") {
+        localStorage.setItem("songlist",JSON.stringify(songArr));
+    } else {
+        let newSongArr = [
+            ...orgSongArr,
+            ...songArr
+        ]
+        localStorage.setItem("songlist",JSON.stringify(newSongArr));
+    }
+
 
     if (currentListCount == 0) {
         showPlayList();
@@ -346,6 +371,23 @@ function removeSongInMyList($targetSong) {
     // 로그인 구분 조건 추가 !!!!!!!!!!
     removeTags(targetObjs);
 
+    let orgArr = JSON.parse(localStorage.getItem("songlist"));
+
+    for(let i=orgArr.length-1; i>=0; i--) {
+        if(pids.includes(orgArr[i].pid)) {
+            orgArr.splice(i,1);
+        }
+    }
+/*     orgArr.forEach((songObj,idx)=>{
+        if(pids.includes(songObj.pid)) {
+            console.log("삭제대상 >> " + songObj.title)
+            orgArr.splice(idx,1);
+        }
+    }) */
+
+    localStorage.setItem('songlist',JSON.stringify(orgArr));
+
+
     let $allMySongs = $('.listCheckbox');
 
     $allMySongs.each(function (index, item) {
@@ -385,23 +427,37 @@ function removeSongInMyList($targetSong) {
 
 
 $(document).ready(() => {
+
     // 2. This code loads the IFrame Player API code asynchronously.
     var tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+
     getMusicChartList('realtime', 1);
+
+    let arrInStorage = JSON.parse(localStorage.getItem('songlist'));
+    if(arrInStorage === null || arrInStorage === '' || arrInStorage.length === 0 ) {
+        hidePlayList();
+    } else {
+        let $listDiv = $(".myPlaylist");
+        $listDiv.append(makeMyListTag(arrInStorage));
+        showPlayList();
+        onPlay(1);
+    }
+
+
     // ajax 호출해서 플레이리스트 불러오는 코드 삽입 !!!!!!!!!!
     let currentListCount = $('.listCount').length;
     if (currentListCount != 0) {
-        // 리스트 영역을 띄운후 제일 첫곡 재생
-    }
+
+    } 
 
     // 상단 차트타입 선택시 이벤트 
     // function 따로 뺄것 
     $('#chartTypes').on('click', 'li', function (e) {
         // 로고 and 로그인 버튼 클릭 이벤트 설정하기!!!!!!!!!!!!!!!!!!!
-        console.log("버튼클릭이벤트")
         $('.left').scrollTop(0);
         e.preventDefault();
         let type = this.dataset.id;
@@ -419,15 +475,15 @@ $(document).ready(() => {
             } 
             getMusicChartList(type, 1);
         } else if (type == 'sign-in') {
-            ajaxService.getAjax()
-            let loginurl = 'oauth2/authorization/google';
-            window.open(API_Server.get(loginurl),'_self');
+            // [201107] 로그인 삭제 
+            // ajaxService.getAjax()
+            // let loginurl = 'oauth2/authorization/google';
+            // window.open(API_Server.get(loginurl),'_self');
          }
     })
 
     // 차트에서 각 노래 추가 버튼 이벤트
     $('.add-only').on('click', function (e) {
-        console.log("---?")
         e.preventDefault();
         addMusicIntoPlayList(this);
     })
